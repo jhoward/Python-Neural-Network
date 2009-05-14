@@ -1,2 +1,7 @@
 A pure python implementation of a neural network.  
 
+Note: Classification isn't working properly as I have to apply the sigmoid 
+function to the output nodes.  
+
+To Add:
+Early Stopping, baysian weight decay.
