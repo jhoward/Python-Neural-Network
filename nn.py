@@ -2,8 +2,8 @@
 Pure Python implementation of a Back-Propagation Neural Network using the
 hyperbolic tangent as the sigmoid squashing function.
 
-Modified Author: James Howard <james.w.howard@gmail.com>
 Original Author: Neil Schemenauer <nas@arctrix.com>
+Modified Author: James Howard <james.w.howard@gmail.com>
 
 Modified to work for function regression and added option to use matplotlib
 to display regression networks.
@@ -14,7 +14,7 @@ Code is placed in public domain.
 import math
 import random
 
-#random.seed(0)
+random.seed(0)
 
 # calculate a random number where:  a <= rand < b
 def rand(a, b):
@@ -82,10 +82,10 @@ class NN:
         # set them to random vaules
         for i in range(self.ni):
             for j in range(self.nh):
-                self.wi[i][j] = rand(-0.5, 0.5)
+                self.wi[i][j] = rand(-1, 1)
         for j in range(self.nh):
             for k in range(self.no):
-                self.wo[j][k] = rand(-0.5, 0.5)
+                self.wo[j][k] = rand(-1, 1)
 
         # last change in weights for momentum   
         self.ci = makeMatrix(self.ni, self.nh)
@@ -113,6 +113,9 @@ class NN:
             for j in range(self.nh):
                 total += self.ah[j] * self.wo[j][k]
             self.ao[k] = total
+            if not self.regression:
+                self.ao[k] = sigmoid(total)
+            
         
         return self.ao[:]
 
@@ -125,6 +128,9 @@ class NN:
         output_deltas = [0.0] * self.no
         for k in range(self.no):
             output_deltas[k] = targets[k] - self.ao[k]
+            if not self.regression:
+                output_deltas[k] = dsigmoid(self.ao[k]) * output_deltas[k]
+
         
         # calculate error terms for hidden
         hidden_deltas = [0.0] * self.nh
@@ -204,9 +210,6 @@ def demoRegression():
     for i in range(steps):
         x = domain[0] + stepsize * i
         y = x**2
-        #y = math.sin(x)
-        #y = 2 * x
-        #y = x**5 + 3*x**3 + 2*x**2
         
         data.append([[x], [y]])
         inputs.append(x)
@@ -215,12 +218,14 @@ def demoRegression():
     n = NN(1, 4, 1, regression = True)
     
     #Train and test the nural network.
-    n.train(data, 2000, 0.2, 0.1, False)
-    outputs = n.test(data, verbose = False)
+    n.train(data, 1000, 0.2, 0.1, False)
+    outputs = n.test(data, verbose = True)
     
     #Plot the function.
     try:
         plot(inputs, outputs, actual)
+        print "Press a key to quit."
+        value = raw_input()
     except:
         print "Must have matplotlib to plot."
 
@@ -238,9 +243,10 @@ def demoClassification():
     n = NN(2, 2, 1, regression = False)
 
     # train it with some patterns then test it.
-    n.train(pat)
+    n.train(pat, 1000, 0.5, 0.2)
     n.test(pat, verbose = True)
 
 
 if __name__ == '__main__':
-    demoRegression()
+    #demoRegression()
+    demoClassification()

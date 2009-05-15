@@ -1,7 +1,12 @@
 A pure python implementation of a neural network.  
 
-Note: Classification isn't working properly as I have to apply the sigmoid 
-function to the output nodes.  
+Original Author: Neil Schemenauer <nas@arctrix.com>
+Modified Author: James Howard <james.w.howard@gmail.com>
 
-To Add:
-Early Stopping, baysian weight decay.
+Added capabilities of network to perform non-linear function regression.  
+Also added a plot command for regression which can only be used if 
+matplotlib is installed.
+
+
+TODO:
+	Early Stopping, bayesian weight decay.
