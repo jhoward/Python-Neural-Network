@@ -79,7 +79,7 @@ class NN:
         self.wi = makeMatrix(self.ni, self.nh)
         self.wo = makeMatrix(self.nh, self.no)
         
-        # set them to random vaules
+        # set them to random values
         for i in range(self.ni):
             for j in range(self.nh):
                 self.wi[i][j] = rand(-1, 1)
